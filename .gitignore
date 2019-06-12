@@ -1,0 +1,5 @@
+*.o
+hid_listen
+hid_listen.exe
+typing_statistics1.cpp
+планирование.txt
