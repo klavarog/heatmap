@@ -10,7 +10,9 @@
 
 #include <chrono>
 #include <iostream>
+#include <fstream>
 #include <deque>
+#include <mutex>
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -27,6 +29,7 @@
 #include "keyboard_listen.h"
 
 #define BUF_SIZE 500
+//#define WRITE_DUMP_TO_FILE
 
 namespace {
 
@@ -50,19 +53,29 @@ long calcDuration(Time a, Time b) {
 FILE* listener;
 bool isTerminate = false;
 bool isExit = false;
+std::mutex close_mutex;
+#ifdef WRITE_DUMP_TO_FILE
+std::ofstream fout("dump.txt", std::ios::app);
+#endif
 void handle_sig(void) {
+	close_mutex.lock();
 	if (!isExit) {
 		isExit = true;
 		isTerminate = true;
 		onExit();
 		#ifdef __WINDOWS
 		_pclose(listener);
+		#ifdef WRITE_DUMP_TO_FILE
+		fout.close();
+		#endif
 		#else 
 		pclose(listener);
 		#endif
 	}
+	close_mutex.unlock();
 }
 
+//-----------------------------------------------------------------------------
 void handle_sig_int(int) {
 	handle_sig();
 }
@@ -135,10 +148,8 @@ void processKey(int col, int row, int layer, int pressed) {
 
 #ifdef __WINDOWS
 //-----------------------------------------------------------------------------
-static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType)
-{
-	switch (dwCtrlType)
-	{
+static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType) {
+	switch (dwCtrlType) {
 		case CTRL_C_EVENT: // Ctrl+C
 			handle_sig();
 			return TRUE;
@@ -178,7 +189,7 @@ int main(int argc, char** argv) {
 		return 0;
 
 	atexit(handle_sig);
-	//at_quick_exit(handle_sig);
+	at_quick_exit(handle_sig);
 	#ifdef __WINDOWS
 	SetConsoleCtrlHandler(console_ctrl_handler, TRUE);
 	listener = _popen("hid_listen.exe", "r");
@@ -201,6 +212,10 @@ int main(int argc, char** argv) {
 			string str(buf);
 			// Если это строка, в которой содержится необходимая нам информация
 			if (str.size() > 3 && str.substr(0, 3) == "KL:") {
+				#ifdef WRITE_DUMP_TO_FILE
+				fout << str;
+				#endif
+
 				// Получаем параметры текущего нажатия
 				int col = parseStrValue(str, "col");
 				int row = parseStrValue(str, "row");
