@@ -50,11 +50,8 @@ TwoTapHeatmap::TwoTapHeatmap(int layersN, int rowsN, int colsN) : v(layersN, row
 
 //-----------------------------------------------------------------------------
 void TwoTapHeatmap::onTap(Tap tap) {	
-	if (lastTap.layer != -1) {
-		auto tap_copy = tap;
-		tap_copy.layer = 0;
-		v[lastTap].onTap(tap_copy);
-	}
+	if (lastTap.layer != -1)
+		v[lastTap].onTap(tap);
 	lastTap = tap;
 }
 
@@ -85,7 +82,6 @@ int TwoTapHeatmap::colsCount(void) const {
 
 //-----------------------------------------------------------------------------
 int TwoTapHeatmap::getTapCount(Tap first, Tap second) const {
-	second.layer = 0;
 	return v[first].getTapCount(second);
 }
 

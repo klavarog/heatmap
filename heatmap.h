@@ -12,12 +12,57 @@ const std::string save_file = "heatmap_file.txt"; /// Файл, куда сох�
 const int tap_count_to_save = 3000; /// Сколько должно пройти нажатий, чтобы текущая статистика сбросилась в файл на диск
 const int tap_count_to_update_date = 100; /// Сколько должно пройти нажатий, чтобы обновилась дата, вдруг день уже не сегодняшний, или вдруг человек не выключает компьютер
 
+class Vector3DIterator
+{
+public:
+	Vector3DIterator(int colN, int rowN, int layerN, int colI = 0, int rowI = 0, int layerI = 0) : colI(colI), rowI(rowI), layerI(layerI), colN(colN), rowN(rowN), layerN(layerN) {}
+
+	Tap operator*(void) const {
+		return Tap{colI, rowI, layerI};
+	}
+
+	Vector3DIterator& operator++(void) {
+		colI++;
+		if (colI >= colN) {
+			colI = 0;
+			rowI++;
+			if (rowI >= rowN) {
+				rowI = 0;
+				layerI++;
+			}
+		}
+		return *this;
+	}
+
+	bool operator==(const Vector3DIterator& b) const {
+		return 
+			colI == b.colI && 
+			rowI == b.rowI && 
+			layerI == b.layerI;
+	}
+
+	bool operator!=(const Vector3DIterator& b) const {
+		return !(operator==(b));
+	}
+private:
+	int colI, rowI, layerI;
+	int colN, rowN, layerN;
+};
+
 template<typename T>
 class Vector3D
 {
 public:
 	Vector3D() : l(0, Rows(0, Cols(0, T()))) {}
 	Vector3D(int layersN, int rowsN, int colsN, const T& obj) : l(layersN, Rows(rowsN, Cols(colsN, obj))) {}
+
+	Vector3DIterator begin(void) const {
+		return Vector3DIterator(colsCount(), rowsCount(), layersCount());
+	}
+
+	Vector3DIterator end(void) const {
+		return Vector3DIterator(colsCount(), rowsCount(), layersCount(), 0, 0, layersCount());
+	}
 
 	T& operator[](const Tap& tap) {
 		if (tap.layer >= layersCount() || tap.row >= rowsCount() || tap.col >= colsCount()) {
@@ -166,6 +211,9 @@ public:
 	void save(std::ostream& out) const;
 	void load(std::istream& in);
 
+	Vector3DIterator begin(void) const { return v.begin(); }
+	Vector3DIterator end(void) const { return v.end(); }
+
 	int layersCount(void) const;
 	int rowsCount(void) const;
 	int colsCount(void) const;
@@ -185,6 +233,11 @@ public:
 
 	void save(std::ostream& out) const;
 	void load(std::istream& in);
+
+	Vector3DIterator begin(void) const { return v.begin(); }
+	Vector3DIterator end(void) const { return v.end(); }
+
+	const OneTapHeatmap& operator[](Tap tap) const { return v[tap]; }
 
 	int layersCount(void) const;
 	int rowsCount(void) const;

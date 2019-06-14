@@ -8,6 +8,14 @@ struct Tap
 	int col, row, layer;
 };
 
+inline bool operator==(const Tap& a, const Tap& b) {
+	return a.col == b.col && a.row == b.row && a.layer == b.layer;
+}
+
+inline bool operator!=(const Tap& a, const Tap& b) {
+	return !operator==(a, b);
+}
+
 inline std::ostream& operator<<(std::ostream& out, const Tap& tap) {
 	out << "(layer=" << tap.layer << ", row=" << tap.row << ", col=" << tap.col << ")";
 	return out;

@@ -59,12 +59,10 @@ int sumRowTaps(int row);
 //-----------------------------------------------------------------------------
 int sumTapTaps(Tap tap) {
 	int32_t sum = 0;
-	for (int j = 0; j < all.twotap.rowsCount(); ++j) {
-		for (int k = 0; k < all.twotap.colsCount(); ++k) {
-			sum += all.twotap.getTapCount(tap, {k, j, 0});
-			if (tap.row != j && tap.col != k)
-				sum += all.twotap.getTapCount({k, j, tap.layer}, {tap.row, tap.col, 0});
-		}
+	for (const auto& i : all.twotap[tap]) {
+		sum += all.twotap.getTapCount(tap, i);
+		if (tap != i)
+			sum += all.twotap.getTapCount(i, tap);
 	}
 	return sum;	
 }
@@ -478,28 +476,27 @@ void twotap(const po::variables_map& vm) {
 				elems.push_back({twotap_name, taps});
 			}
 		};
-		for (int j2 = 0; j2 < all.twotap.rowsCount(); ++j2) {
-			for (int k2 = 0; k2 < all.twotap.colsCount(); ++k2) {
-				Tap tap2{j2, k2, tap1.layer};
-
-				add_taps(tap1, tap2);
-				if (isSeparateByKeys && tap1.row != tap2.row && tap1.col != tap2.row)
-					add_taps(tap2, tap1);
-			}
+		for (const auto& i : all.twotap[tap1]) {
+			add_taps(tap1, i);
 		}
+		if (isSeparateByKeys) 
+			for (const auto& i : all.twotap) {
+				tap1_name = get_tap_name(i);
+				add_taps(i, tap1);
+			}
 		if (isSumEqualKeys) sum_equal_keys(elems);
 	};
 	auto make_for_layer = [&] (std::vector<tap_elem>& elems, int layer) {
 		for (int j1 = 0; j1 < all.twotap.rowsCount(); ++j1) {
 			for (int k1 = 0; k1 < all.twotap.colsCount(); ++k1) {
-				Tap tap1{j1, k1, layer};
+				Tap tap1{k1, j1, layer};
 				make_for_tap(elems, tap1, get_tap_name(tap1));
 			}
 		}
 		if (isSumEqualKeys) sum_equal_keys(elems);
 	};
 	auto make_for_layers = [&] (std::vector<tap_elem>& elems) {
-		for (int i = 0; i < all.onetap.layersCount(); ++i)
+		for (int i = 0; i < all.twotap.layersCount(); ++i)
 			make_for_layer(elems, i);
 		if (isSumEqualKeys) sum_equal_keys(elems);
 	};
@@ -539,11 +536,11 @@ void twotap(const po::variables_map& vm) {
 	};
 
 	if (isSeparateByKeys) {
-		for (int i = 0; i < all.onetap.layersCount(); ++i) {
+		for (int i = 0; i < all.twotap.layersCount(); ++i) {
 			std::cout << "Layer: " << i << std::endl;
 			for (int j1 = 0; j1 < all.twotap.rowsCount(); ++j1) {
 				for (int k1 = 0; k1 < all.twotap.colsCount(); ++k1) {
-					Tap tap{j1, k1, i};
+					Tap tap{k1, j1, i};
 					std::vector<tap_elem> elems;
 					if (isPrintFirstName)
 						make_for_tap(elems, tap, get_tap_name(tap));
@@ -562,7 +559,7 @@ void twotap(const po::variables_map& vm) {
 			std::cout << std::endl;
 		}
 	} else if (isSeparateByLayers) {
-		for (int i = 0; i < all.onetap.layersCount(); ++i) {
+		for (int i = 0; i < all.twotap.layersCount(); ++i) {
 			std::cout << "Layer: " << i << std::endl;
 			std::vector<tap_elem> elems;
 			make_for_layer(elems, i);
