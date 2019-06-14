@@ -271,10 +271,10 @@ const char* keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,    й,        ц,        у,        е,        ф,        _______,
     _______,    к,        м,        в,        а,        п,   
     _______,    я,        ч,        с,        и,        ы,        _______,
-    _______,    _______,  _______,  _______,  KC_UNDS,
+    _______,    _______,  _______,  _______,  _,
 
         _______,   _______,   _______,
-        SHF_3,     _______,   _______,
+        Shift,     _______,   _______,
 
 
     _______,    *,        !,        ")",     "(",       ?,        _______,
@@ -309,30 +309,30 @@ const char* keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   //---------------------------------------------------------------------------
   LAYOUT_ergodox(
-    TG(4),      KC_F7,    KC_F5,    KC_F3,    KC_F1,    KC_F9,    CT_X,
-    AU_MUTE,    SH_F11,   CT_F10,   KC_F10,   KC_F11,   WN_D,     CT_C,
-    _______,    AU_VOLU,  AU_NEXT,  CS_TAB,   CT_TAB,   AL_TAB,
-    _______,    AU_VOLD,  AU_PREV,  CT_1,     CT_2,     AL_TTAB,  CT_V,
-    DN_PLY2,    DN_STOP,  DN_STR2,  WN_E,     AU_PLAY,
+    TG(4),      F7,       F5,       F3,       F1,       F9,       Ctrl+X,
+    Mute sound,     Shift+F11,  Ctrl+F10, F10,      F11,      Win+D,    Ctrl+C,
+    _______,    Volume up,  Next track,  Ctrl+Shift+Tab,   Ctrl+Tab,   Alt+Tab,
+    _______,    Volume down,  Prev track,  Ctrl+1,     Ctrl+2,Alt+Tab+Tab, Ctrl+V,
+    Dynamic macros play 2,    Dynamic macros stop recording,  Dynamic macros start recording 2,  Win+E,     Play music,
 
         _______,  _______,  _______,
         _______,  _______,  _______,
 
-    KC_NLCK,    KC_F10,   KC_F2,    KC_F4,    KC_F6,    KC_F8,    KC_F11,
-    KC_INSERT,  CT_DEL,   KC_HOME,  KC_END,   KC_PGUP,  KC_PGDN,  KC_F12,
-                CT_BSPC,  KC_LEFT,  KC_UP,    KC_DOWN,  KC_RGHT,  KC_PSCR,
-    KC_PAUSE,   CT_ENT,   CT_LEFT,  CT_UP,    CT_DOWN,  CT_RGHT,  AL_PSCR,
-                          _______,   _______, DN_STR1,  DN_STOP,  DN_PLY1,
+    Num Lock,    F10,   F2,    F4,    F6,    F8,    F11,
+    Insert,  Ctrl+Delete,   Home,  End,   Page Up,  Page Down,  F12,
+                Ctrl+Backspace,  Left,  Up,    Down,  Right,  Print Screen,
+    Pause,   Ctrl+Enter,   Ctrl+Left,  Ctrl+Up,    Ctrl+Down,  Ctrl+Right,  Alt+Print screen,
+                          _______,   _______, Dynamic macros start recording 1,  Dynamic macros stop recording,  Dynamic macros play 1,
 
         _______,  _______,  _______,
         _______,  _______,  _______),
 
   //---------------------------------------------------------------------------
   LAYOUT_ergodox(
-    TG(5),      CT_1,     CT_2,     CT_3,     CT_4,     CT_5,     CT_X,
-    KC_F5,      KC_F6,    CS_T,     CT_T,     CT_W,     CT_J,     CT_C,
-    KC_BTN2,    KC_BTN1,  KC_BTN3,  CS_TAB,   CT_TAB,   CT_D,
-    _______,    CT_S,     KC_ENT,   KC_UP,    KC_DOWN,  CT_F,     CT_V,
+    TG(5),      Ctrl+1,     Ctrl+2,     Ctrl+3,     Ctrl+4,     Ctrl+5,     Ctrl+X,
+    F5,      F6,    Ctrl+Shift+T,     Ctrl+T,     Ctrl+W,     Ctrl+J,     Ctrl+C,
+    Mouse Right Button,    Mouse Left Button,  Mouse Middle Button,  Ctrl+Shift+Tab,   Ctrl+Tab,   Ctrl+D,
+    _______,    Ctrl+S,     Enter,   Up,    Down,  Ctrl+F,     Ctrl+V,
     _______,    _______,  _______,  _______,  _______,  
 
         _______,  _______,  _______,
@@ -340,8 +340,8 @@ const char* keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     _______,    _______,  _______,  _______,  _______,  _______,  _______,
     _______,    _______,  _______,  _______,  _______,  _______,  _______,
-                _______,  MS_LEFT,  MS_UP,    MS_DOWN,  MS_RGHT,  _______,
-    _______,    _______,  MSWH_LF,  MSWH_UP,  MSWH_DW,  MSWH_RG,  _______,
+                _______,  Mouse Left 1px,  Mouse Up 1px,    Mouse Down 1px,  Mouse Right 1px,  _______,
+    _______,    _______,  Mouse Wheel Left,  Mouse Wheel Up,  Mouse Wheel Down,  Mouse Wheel Up,  _______,
                 _______,  _______,  _______,  _______,  _______,
 
         _______,  _______,  _______,
@@ -349,21 +349,21 @@ const char* keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   //---------------------------------------------------------------------------
   LAYOUT_ergodox(
-    KC_ESC,     KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,
-    KC_TAB,     KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_7,
-    KC_LSFT,    KC_A,     KC_S,     KC_D,     KC_F,     KC_G,
-    KC_LCTL,    KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_8,
-    XXXXXXX,    XXXXXXX,  TG(6),    KC_PERC,  RU_CMSP,
+    Esc,     1,     2,     3,     4,     5,     6,
+    Tab,     q,     w,     e,     r,     t,     7,
+    Shift,   a,     s,     d,     f,     g,
+    Ctrl,    z,     x,     c,     v,     b,     8,
+    XXXXXXX,    XXXXXXX,  TG(6),  %,     ", ",
 
         XXXXXXX,   XXXXXXX,   XXXXXXX,
-        KC_SPC,    KC_LALT,   KC_ENT,
+        Space,    Alt,   Enter,
 
 
-    XXXXXXX,    KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     XXXXXXX,
-    XXXXXXX,    KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_RBRC,
-                KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,
-    XXXXXXX,    KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  KC_UNDS,
-                          KC_LEFT,  KC_UP,    KC_DOWN,  KC_RGHT,  XXXXXXX,
+    XXXXXXX,    6,     7,     8,     9,     0,     XXXXXXX,
+    XXXXXXX,    y,     u,     i,     o,     p,     ],
+                h,     j,     k,     l,     ";",   "'",
+    XXXXXXX,    n,     m,     ",",   ".",   "/",   _,
+                       Left,  Up,    Down,  Right, XXXXXXX,
 
         XXXXXXX,   XXXXXXX,   XXXXXXX,
         XXXXXXX,   XXXXXXX,   XXXXXXX),
