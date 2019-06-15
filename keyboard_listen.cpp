@@ -112,9 +112,15 @@ void processKey(int col, int row, int layer, int pressed) {
 			if (!i.isFinished && i.col == col && i.row == row) {
 				i.isFinished = true;
 				i.duration = calcDuration(current_time, i.start_press);
-				break;
+				goto key_unpressed;
 			}
 		}
+		cerr << "Key "
+			<< "col=" << col
+			<< ", row=" << row
+			<< ", layer=" << layer
+			<< " is not pressed yet! Can't unpress it." << endl;
+		key_unpressed:;
 	} else {
 		// Если клавишу нажимают, то помещаем её в очередь нажимаемых
 		keys.push_back({
@@ -188,21 +194,27 @@ int main(int argc, char** argv) {
 	if (!onStart(argc, argv))
 		return 0;
 
+	// Первым параметром всегда является программа hid_listen, и его можно задать
+	std::string hid_listen = "hid_listen.exe";
+	if (argc > 1 && argv[1] != 0) {
+		hid_listen = argv[1];
+	}
+
 	atexit(handle_sig);
 	at_quick_exit(handle_sig);
 	#ifdef __WINDOWS
 	SetConsoleCtrlHandler(console_ctrl_handler, TRUE);
-	listener = _popen("hid_listen.exe", "r");
+	listener = _popen(hid_listen.c_str(), "r");
 	if (listener == NULL)
-		cout << "Error when running `hid_listen.exe`." << endl;
+		cout << "Error when running `" << hid_listen << "`." << endl;
 	#else 
 	signal(SIGINT, handle_sig_int);  // ^C
 	signal(SIGABRT, handle_sig_int); // abort()
 	signal(SIGTERM, handle_sig_int); // sent by "kill" command
 	signal(SIGTSTP, handle_sig_int); // ^Z
-	listener = popen("sudo ./hid_listen", "r");
+	listener = popen(("sudo ./" + hid_listen).c_str(), "r");
 	if (listener == NULL)
-		cout << "Error when running `sudo ./hid_listen.exe`." << endl;
+		cout << "Error when running `sudo ./" << hid_listen << "`." << endl;
 	#endif
 
 	char buf[BUF_SIZE] = {};
