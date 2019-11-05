@@ -185,6 +185,14 @@ static BOOL WINAPI console_ctrl_handler(DWORD dwCtrlType) {
 #endif
 
 //-----------------------------------------------------------------------------
+std::string getPath(std::string argv0) {
+	std::string program_name = "heatmap_recorder.exe";
+	for (int i = 0; i < program_name.size(); ++i)
+		argv0.pop_back();
+	return argv0;
+}
+
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
@@ -195,7 +203,7 @@ int main(int argc, char** argv) {
 		return 0;
 
 	// Первым параметром всегда является программа hid_listen, и его можно задать
-	std::string hid_listen = "hid_listen.exe";
+	std::string hid_listen = getPath(argv[0]) + "hid_listen.exe";
 	if (argc > 1 && argv[1] != 0) {
 		hid_listen = argv[1];
 	}

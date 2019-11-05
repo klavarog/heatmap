@@ -7,6 +7,7 @@ AllStatistics all(save_file);
 
 //-----------------------------------------------------------------------------
 bool onStart(int argc, char** argv) {
+	all.file = getPath(argv[0]) + save_file;
 	all.load();
 	return true;
 }

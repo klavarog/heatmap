@@ -18,3 +18,6 @@ void onTap(Tap tap, long time_duration, long time_offset);
 
 /** Функция, вызываемая при закрытии программы. Может использоваться для сохранения статистики и прочего. */
 void onExit(void);
+
+/** Извлекает путь к текущей программе через нулевой аргумент командной строки. */
+std::string getPath(std::string argv0);
